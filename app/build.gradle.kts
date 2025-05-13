@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+
     implementation (libs.com.squareup.retrofit2.retrofit4)
     implementation (libs.converter.gson)
     implementation (libs.gson)

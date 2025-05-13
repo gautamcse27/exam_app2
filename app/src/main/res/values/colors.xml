@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="background">#F5F7FA</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_math">#E3F2FD</color>
+    <color name="card_science">#E8F5E9</color>
+    <color name="text_primary">#1A237E</color>
+    <color name="text_secondary">#455A64</color>
+    <color name="text_hint">#78909C</color>
+    <color name="button_background">#3F51B5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="card_border">#FFC0CB</color>
 </resources>
