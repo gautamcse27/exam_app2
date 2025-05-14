@@ -1,6 +1,7 @@
 package com.example.exam_app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
         seatAssignmentsContainer = findViewById(R.id.seatAssignmentsContainer);
         subjectsContainer = findViewById(R.id.subjectsContainer);
 
-        // Get student from intent
         Student student = (Student) getIntent().getSerializableExtra("student");
 
         if (student != null) {
@@ -53,10 +53,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
 
             allAssignments = student.getSeatAssignments();
 
-            // Setup dropdown with prompt
             setupSubjectDropdown(student.getSubjects());
-
-            // Show visual list of registered subjects with animation
             displaySubjects(student.getSubjects(), subjectsContainer);
             subjectsContainer.setAlpha(0);
             subjectsContainer.animate().alpha(1).setDuration(300).start();
@@ -88,12 +85,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                 tv.setTextColor(getResources().getColor(R.color.text_primary));
                 if (item.equals(PROMPT_ITEM)) {
                     tv.setTextColor(getResources().getColor(R.color.text_hint));
-                } else if (item.equals("Math")) {
-                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_math, 0, 0, 0);
-                } else if (item.equals("Science")) {
-                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_science, 0, 0, 0);
                 }
-                tv.setCompoundDrawablePadding(8);
                 return view;
             }
 
@@ -105,13 +97,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
                 tv.setTextColor(getResources().getColor(R.color.text_primary));
                 if (item.equals(PROMPT_ITEM)) {
                     tv.setTextColor(getResources().getColor(R.color.text_hint));
-                } else if (item.equals("Math")) {
-                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_math, 0, 0, 0);
-                } else if (item.equals("Science")) {
-                    tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_science, 0, 0, 0);
                 }
-                tv.setCompoundDrawablePadding(8);
-                tv.setBackgroundResource(R.drawable.spinner_dropdown_background);
                 return view;
             }
         };
@@ -181,8 +167,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
             cardView.setLayoutParams(cardParams);
             cardView.setCardElevation(4);
             cardView.setRadius(12);
-            cardView.setCardBackgroundColor(getResources().getColor(
-                    assignment.getExamSubject().equalsIgnoreCase("Math") ? R.color.card_math : R.color.card_science));
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.card_math)); // Example
 
             LinearLayout assignmentLayout = new LinearLayout(this);
             assignmentLayout.setOrientation(LinearLayout.VERTICAL);
@@ -192,7 +177,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
             examSubject.setText("Exam: " + assignment.getExamSubject());
             examSubject.setTextSize(16);
             examSubject.setTextColor(getResources().getColor(R.color.text_primary));
-            examSubject.setTypeface(null, android.graphics.Typeface.BOLD);
 
             TextView examDateTime = new TextView(this);
             examDateTime.setText("Date/Time: " + assignment.getFormattedExamDateTime());
@@ -200,8 +184,7 @@ public class StudentDetailsActivity extends AppCompatActivity {
             examDateTime.setTextColor(getResources().getColor(R.color.text_secondary));
 
             TextView roomInfo = new TextView(this);
-            roomInfo.setText("Room: " + assignment.getRoomNumber() +
-                    " (Capacity: " + assignment.getCapacity() + ")");
+            roomInfo.setText("Room: " + assignment.getRoomNumber() + " (Capacity: " + assignment.getCapacity() + ")");
             roomInfo.setTextSize(14);
             roomInfo.setTextColor(getResources().getColor(R.color.text_secondary));
 
@@ -215,11 +198,24 @@ public class StudentDetailsActivity extends AppCompatActivity {
             seatInfo.setTextSize(14);
             seatInfo.setTextColor(getResources().getColor(R.color.text_secondary));
 
+            MaterialButton mapButton = new MaterialButton(this);
+            mapButton.setText("View on Map");
+            mapButton.setIconResource(R.drawable.ic_map);
+            mapButton.setOnClickListener(v -> {
+                double lat = assignment.getLatitude();
+                double lon = assignment.getLongitude();
+                Uri gmmIntentUri = Uri.parse("geo:" + lat + "," + lon + "?q=" + lat + "," + lon + "(" + assignment.getExamVenue() + ")");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            });
+
             assignmentLayout.addView(examSubject);
             assignmentLayout.addView(examDateTime);
             assignmentLayout.addView(roomInfo);
             assignmentLayout.addView(venueInfo);
             assignmentLayout.addView(seatInfo);
+            assignmentLayout.addView(mapButton);
 
             cardView.addView(assignmentLayout);
             container.addView(cardView);
@@ -243,7 +239,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
         header.setText("Registered Subjects");
         header.setTextSize(18);
         header.setTextColor(getResources().getColor(R.color.text_primary));
-        header.setTypeface(null, android.graphics.Typeface.BOLD);
         header.setPadding(0, 0, 0, 8);
         container.addView(header);
 
@@ -257,20 +252,13 @@ public class StudentDetailsActivity extends AppCompatActivity {
             cardView.setLayoutParams(cardParams);
             cardView.setRadius(8);
             cardView.setCardElevation(2);
-            cardView.setCardBackgroundColor(getResources().getColor(
-                    subject.equalsIgnoreCase("Math") ? R.color.card_math : R.color.card_science));
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.card_math));
 
             TextView subjectView = new TextView(this);
             subjectView.setText("• " + subject);
             subjectView.setTextSize(16);
             subjectView.setTextColor(getResources().getColor(R.color.text_primary));
             subjectView.setPadding(12, 12, 12, 12);
-            if (subject.equals("Math")) {
-                subjectView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_math, 0, 0, 0);
-            } else if (subject.equals("Science")) {
-                subjectView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_science, 0, 0, 0);
-            }
-            subjectView.setCompoundDrawablePadding(8);
 
             cardView.addView(subjectView);
             container.addView(cardView);

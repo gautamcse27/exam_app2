@@ -11,7 +11,7 @@ public class Student implements Serializable {
     private List<String> subjects;
     private String year;
     private String userid;
-    private List<SeatAssignment> seatAssignments; // New field for seat assignments
+    private List<SeatAssignment> seatAssignments;
 
     // Getters and setters
     public int getId() { return id; }
@@ -35,13 +35,11 @@ public class Student implements Serializable {
     public String getUserid() { return userid; }
     public void setUserid(String userid) { this.userid = userid; }
 
-    // Seat assignments getter and setter
     public List<SeatAssignment> getSeatAssignments() { return seatAssignments; }
     public void setSeatAssignments(List<SeatAssignment> seatAssignments) {
         this.seatAssignments = seatAssignments;
     }
 
-    // Helper method to get subjects as comma-separated string
     public String getSubjectsAsString() {
         if (subjects == null || subjects.isEmpty()) {
             return "No subjects";
@@ -49,7 +47,6 @@ public class Student implements Serializable {
         return String.join(", ", subjects);
     }
 
-    // SeatAssignment inner class
     public static class SeatAssignment implements Serializable {
         private int id;
         private int seat_number;
@@ -59,6 +56,7 @@ public class Student implements Serializable {
         private String exam_date;
         private String exam_time;
         private String exam_venue;
+        private VenueCoordinates venue_coordinates;
 
         // Getters and setters
         public int getId() { return id; }
@@ -85,9 +83,43 @@ public class Student implements Serializable {
         public String getExamVenue() { return exam_venue; }
         public void setExamVenue(String examVenue) { this.exam_venue = examVenue; }
 
-        // Helper method to format exam date and time
+        public VenueCoordinates getVenueCoordinates() { return venue_coordinates; }
+        public void setVenueCoordinates(VenueCoordinates venueCoordinates) {
+            this.venue_coordinates = venueCoordinates;
+        }
+
         public String getFormattedExamDateTime() {
             return exam_date + " at " + exam_time;
+        }
+
+        // ✅ New helper methods to fix "Cannot resolve method 'getLatitude'"
+        public double getLatitude() {
+            return venue_coordinates != null ? venue_coordinates.getLatitude() : 0.0;
+        }
+
+        public double getLongitude() {
+            return venue_coordinates != null ? venue_coordinates.getLongitude() : 0.0;
+        }
+    }
+
+    public static class VenueCoordinates implements Serializable {
+        private double latitude;
+        private double longitude;
+
+        public VenueCoordinates(double latitude, double longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() { return latitude; }
+        public void setLatitude(double latitude) { this.latitude = latitude; }
+
+        public double getLongitude() { return longitude; }
+        public void setLongitude(double longitude) { this.longitude = longitude; }
+
+        @Override
+        public String toString() {
+            return latitude + "," + longitude;
         }
     }
 }

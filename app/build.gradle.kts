@@ -32,7 +32,9 @@ android {
 }
 
 dependencies {
-
+    implementation (libs.play.services.maps)
+    implementation (libs.material.v160)
+    implementation (libs.constraintlayout.v214)
     implementation (libs.com.squareup.retrofit2.retrofit4)
     implementation (libs.converter.gson)
     implementation (libs.gson)

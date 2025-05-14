@@ -14,10 +14,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <activity
-            android:name=".StudentDetailsActivity"
-            android:exported="false" />
-
+        <!-- Welcome/Home Screen Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -26,6 +23,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Student Login Activity -->
+        <activity
+            android:name=".StudentLoginActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity">
+            <!-- Optional: Add meta-data for navigation up button -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <!-- Student Details Activity -->
+        <activity
+            android:name=".StudentDetailsActivity"
+            android:exported="false"
+            android:parentActivityName=".StudentLoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StudentLoginActivity" />
+        </activity>
+
     </application>
 
 </manifest>
